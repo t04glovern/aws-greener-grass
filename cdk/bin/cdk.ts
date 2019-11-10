@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import cdk = require('@aws-cdk/core');
-import { CdkStack } from '../lib/cdk-stack';
+import { GreengrassCore } from '../lib/greengrass-core';
 
 const app = new cdk.App();
-new CdkStack(app, 'greengrass-cdk');
+new GreengrassCore(app, 'greengrass-cdk');
