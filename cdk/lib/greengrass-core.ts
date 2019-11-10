@@ -3,7 +3,9 @@ import greengrass = require('@aws-cdk/aws-greengrass');
 
 import { ThingVendor } from './functions/thing-vendor';
 import { GreengrassRole } from './roles/greengrass';
+
 import { CoreDefinition } from './definitions/core-definition';
+import { LoggerDefinition } from './definitions/logger-definition';
 
 const deviceName = 'lila';
 
@@ -13,6 +15,8 @@ export class GreengrassCore extends cdk.Stack {
 
     /**
      * Sets up CloudFormation custom resources for Thing vending
+     * this allows us to vend a device easily and retrieve the certificate
+     * details.
      */
     const thing_vendor_function = new ThingVendor(this, 'thing-vendor', {
       deviceName
@@ -32,14 +36,41 @@ export class GreengrassCore extends cdk.Stack {
     });
 
     /**
+     * Greengrass - LoggerDefinition
+     */
+    const greengrass_logger_def = new LoggerDefinition(this, 'greengrass-logger-def', {
+      deviceName
+    });
+
+    /**
      * GreengrassGroup
      */
     const greengrass_group = new greengrass.CfnGroup(this, 'greengrass-group', {
       name: deviceName,
       roleArn: greengrass_role.role.roleArn,
       initialVersion: {
-        coreDefinitionVersionArn: greengrass_core_def.version.ref
+        coreDefinitionVersionArn: greengrass_core_def.version.ref,
+        loggerDefinitionVersionArn: greengrass_logger_def.version.ref
       }
+    });
+
+    /**
+     * Stack Outputs
+     */
+    new cdk.CfnOutput(this, 'certificateId', {
+      value: thing_vendor_function.getAtt('certificateId').toString()
+    });
+    new cdk.CfnOutput(this, 'certificatePem', {
+      value: thing_vendor_function.getAtt('certificatePem').toString()
+    });
+    new cdk.CfnOutput(this, 'privateKey', {
+      value: thing_vendor_function.getAtt('privateKey').toString()
+    });
+    new cdk.CfnOutput(this, 'iotEndpoint', {
+      value: thing_vendor_function.getAtt('iotEndpoint').toString()
+    });
+    new cdk.CfnOutput(this, 'greengrassGroupId', {
+      value: greengrass_group.attrId
     });
   }
 }
