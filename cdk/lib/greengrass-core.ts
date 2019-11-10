@@ -20,7 +20,7 @@ export class GreengrassCore extends cdk.Stack {
      */
     const thing_vendor_function = new ThingVendor(this, 'thing-vendor', {
       deviceName
-    }).thingVendor;
+    });
 
     /**
      * Greengrass Role used by Greengrass Core device
@@ -32,7 +32,7 @@ export class GreengrassCore extends cdk.Stack {
      */
     const greengrass_core_def = new CoreDefinition(this, 'greengrass-core-def', {
       deviceName,
-      certificateId: thing_vendor_function.getAtt('certificateId').toString()
+      certificateId: thing_vendor_function.ref.getAtt('certificateId').toString()
     });
 
     /**
@@ -47,7 +47,7 @@ export class GreengrassCore extends cdk.Stack {
      */
     const greengrass_group = new greengrass.CfnGroup(this, 'greengrass-group', {
       name: deviceName,
-      roleArn: greengrass_role.role.roleArn,
+      roleArn: greengrass_role.roleArn,
       initialVersion: {
         coreDefinitionVersionArn: greengrass_core_def.version.ref,
         loggerDefinitionVersionArn: greengrass_logger_def.version.ref
@@ -58,16 +58,16 @@ export class GreengrassCore extends cdk.Stack {
      * Stack Outputs
      */
     new cdk.CfnOutput(this, 'certificateId', {
-      value: thing_vendor_function.getAtt('certificateId').toString()
+      value: thing_vendor_function.ref.getAtt('certificateId').toString()
     });
     new cdk.CfnOutput(this, 'certificatePem', {
-      value: thing_vendor_function.getAtt('certificatePem').toString()
+      value: thing_vendor_function.ref.getAtt('certificatePem').toString()
     });
     new cdk.CfnOutput(this, 'privateKey', {
-      value: thing_vendor_function.getAtt('privateKey').toString()
+      value: thing_vendor_function.ref.getAtt('privateKey').toString()
     });
     new cdk.CfnOutput(this, 'iotEndpoint', {
-      value: thing_vendor_function.getAtt('iotEndpoint').toString()
+      value: thing_vendor_function.ref.getAtt('iotEndpoint').toString()
     });
     new cdk.CfnOutput(this, 'greengrassGroupId', {
       value: greengrass_group.attrId

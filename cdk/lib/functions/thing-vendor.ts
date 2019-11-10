@@ -12,7 +12,7 @@ export interface IThingVendor {
 
 export class ThingVendor extends cdk.Construct {
 
-  public readonly thingVendor: CfnCustomResource;
+  public readonly ref: CfnCustomResource;
 
   constructor(scope: cdk.Construct, id: string, props: IThingVendor) {
     super(scope, id);
@@ -37,10 +37,10 @@ export class ThingVendor extends cdk.Construct {
       role: vendRole.role
     });
 
-    this.thingVendor = new CfnCustomResource(this, 'thing-vendor-function', {
+    this.ref = new CfnCustomResource(this, 'thing-vendor-function', {
       serviceToken: thingVendor.functionArn
     });
-    this.thingVendor.addPropertyOverride('ThingName', props.deviceName)
+    this.ref.addPropertyOverride('ThingName', props.deviceName)
 
     const group_deployment_reset_function = new CfnCustomResource(this, 'group-deployment-reset-function', {
       serviceToken: groupDeploymentReset.functionArn
