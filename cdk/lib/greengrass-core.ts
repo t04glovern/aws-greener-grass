@@ -6,6 +6,8 @@ import { GreengrassRole } from './roles/greengrass';
 
 import { CoreDefinition } from './definitions/core-definition';
 import { LoggerDefinition } from './definitions/logger-definition';
+import { ResourceDefinition } from './definitions/resource-definition';
+import { ConnectorDefinition } from './definitions/connector-definition';
 
 const deviceName = 'lila';
 
@@ -43,6 +45,20 @@ export class GreengrassCore extends cdk.Stack {
     });
 
     /**
+     * Greengrass - ResourceDefinition
+     */
+    const greengrass_resource_def = new ResourceDefinition(this, 'greengrass-resource-def', {
+      deviceName
+    });
+
+    /**
+     * Greengrass - ConnectorDefinition
+     */
+    const greengrass_connector_def = new ConnectorDefinition(this, 'greengrass-connector-def', {
+      deviceName
+    });
+
+    /**
      * GreengrassGroup
      */
     const greengrass_group = new greengrass.CfnGroup(this, 'greengrass-group', {
@@ -50,7 +66,9 @@ export class GreengrassCore extends cdk.Stack {
       roleArn: greengrass_role.roleArn,
       initialVersion: {
         coreDefinitionVersionArn: greengrass_core_def.version.ref,
-        loggerDefinitionVersionArn: greengrass_logger_def.version.ref
+        loggerDefinitionVersionArn: greengrass_logger_def.version.ref,
+        resourceDefinitionVersionArn: greengrass_resource_def.version.ref,
+        connectorDefinitionVersionArn: greengrass_connector_def.version.ref
       }
     });
 

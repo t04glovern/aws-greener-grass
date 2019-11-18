@@ -1,4 +1,4 @@
-import cdk = require("@aws-cdk/core");
+import cdk = require('@aws-cdk/core');
 import greengrass = require('@aws-cdk/aws-greengrass');
 
 export interface ICoreDefinition {
