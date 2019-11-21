@@ -3,6 +3,7 @@ import greengrass = require('@aws-cdk/aws-greengrass');
 
 import { ThingVendor } from './functions/thing-vendor';
 import { GreengrassRole } from './roles/greengrass';
+import { OTAUpdateRole } from './roles/ota-update';
 
 import { CoreDefinition } from './definitions/core-definition';
 import { LoggerDefinition } from './definitions/logger-definition';
@@ -28,6 +29,11 @@ export class GreengrassCore extends cdk.Stack {
      * Greengrass Role used by Greengrass Core device
      */
     const greengrass_role = new GreengrassRole(this, 'greengrass-role');
+
+    /**
+     * OTA Update Role used to perform OTA Updates on IoT Devices
+     */
+    const ota_update_role = new OTAUpdateRole(this, 'ota-update-role');
 
     /**
      * Greengrass - CoreDefinition
@@ -89,6 +95,9 @@ export class GreengrassCore extends cdk.Stack {
     });
     new cdk.CfnOutput(this, 'greengrassGroupId', {
       value: greengrass_group.attrId
+    });
+    new cdk.CfnOutput(this, 'otaUpdateRole', {
+      value: ota_update_role.roleArn
     });
   }
 }
