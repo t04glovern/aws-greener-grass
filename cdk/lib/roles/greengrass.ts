@@ -33,6 +33,12 @@ export class GreengrassRole extends cdk.Construct {
     this.role.addToPolicy(
       new PolicyStatement({
         resources: ['*'],
+        actions: ['cloudwatch:PutMetricData']
+      })
+    );
+    this.role.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
         actions: ['iot:*']
       })
     );

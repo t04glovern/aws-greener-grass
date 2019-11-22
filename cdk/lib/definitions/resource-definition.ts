@@ -25,7 +25,10 @@ export class ResourceDefinition extends cdk.Construct {
           resourceDataContainer: {
             localVolumeResourceData: {
               sourcePath: '/proc',
-              destinationPath: '/proc-dd'
+              destinationPath: '/host_proc',
+              groupOwnerSetting: {
+                autoAddGroupOwner: true
+              }
             }
           }
         }

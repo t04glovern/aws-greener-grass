@@ -23,9 +23,19 @@ export class ConnectorDefinition extends cdk.Construct {
           id: `${props.deviceName}-device-defender`,
           connectorArn: `arn:aws:greengrass:${cdk.Aws.REGION}::/connectors/DeviceDefender/versions/2`,
           parameters: {
-            'SampleIntervalSeconds': '600',
-            'ProcDestinationPath': '/proc',
+            'SampleIntervalSeconds': '300',
+            'ProcDestinationPath': '/host_proc',
             'ProcDestinationPath-ResourceId': `${props.deviceName}-local-device-proc-dd` // TODO pull this from resource
+          }
+        },
+        {
+          id: `${props.deviceName}-cloudwatch-metrics`,
+          connectorArn: `arn:aws:greengrass:${cdk.Aws.REGION}::/connectors/CloudWatchMetrics/versions/2`,
+          parameters: {
+            'PublishInterval': '10',
+            'PublishRegion': `${cdk.Aws.REGION}`,
+            'MemorySize': '65535',
+            'MaxMetricsToRetain': '2000'
           }
         }
       ]
