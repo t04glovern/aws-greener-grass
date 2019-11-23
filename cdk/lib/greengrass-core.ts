@@ -10,11 +10,11 @@ import { LoggerDefinition } from './definitions/logger-definition';
 import { ResourceDefinition } from './definitions/resource-definition';
 import { ConnectorDefinition } from './definitions/connector-definition';
 
-const deviceName = 'lila';
-
 export class GreengrassCore extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const deviceName = this.node.tryGetContext('device_name');
 
     /**
      * Sets up CloudFormation custom resources for Thing vending

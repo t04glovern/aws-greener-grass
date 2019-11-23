@@ -1,57 +1,33 @@
 #!/bin/bash
 
-PREFIX="devopstar"
-THING_NAME="elise"
+STACK_NAME="greengrass-cdk"
+THING_NAME="lila"
 AWS_REGION="us-east-1"
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity |  jq -r '.Account')
 
-thingVendorFunction=$(aws cloudformation describe-stacks \
-    --stack-name ${PREFIX}-iot-vendor \
-    --query 'Stacks[0].Outputs[?OutputKey==`ThingVendorFunction`].OutputValue' \
-    --region ${AWS_REGION} \
-    --output text)
-
-groupDeploymentResetFunction=$(aws cloudformation describe-stacks \
-    --stack-name ${PREFIX}-iot-vendor \
-    --query 'Stacks[0].Outputs[?OutputKey==`GroupDeploymentResetFunction`].OutputValue' \
-    --region ${AWS_REGION} \
-    --output text)
-
-aws cloudformation update-stack \
-    --stack-name ${PREFIX}-ggc-${THING_NAME} \
-    --template-body file://greengrass-core.yml \
-    --parameters \
-        ParameterKey=DeviceName,ParameterValue=${THING_NAME} \
-        ParameterKey=ThingVendorFunction,ParameterValue=${thingVendorFunction} \
-        ParameterKey=GroupDeploymentResetFunction,ParameterValue=${groupDeploymentResetFunction} \
-    --region ${AWS_REGION} \
-    --capabilities CAPABILITY_IAM
-
-aws cloudformation wait stack-update-complete \
-    --stack-name ${PREFIX}-ggc-${THING_NAME} \
-    --region ${AWS_REGION}
+cdk deploy --context=device_name=${THING_NAME}
 
 certificateId=$(aws cloudformation describe-stacks \
-    --stack-name ${PREFIX}-ggc-${THING_NAME} \
-    --query 'Stacks[0].Outputs[?OutputKey==`CertificateId`].OutputValue' \
+    --stack-name ${STACK_NAME} \
+    --query 'Stacks[0].Outputs[?OutputKey==`certificateId`].OutputValue' \
     --region ${AWS_REGION} \
     --output text)
 
 certificatePem=$(aws cloudformation describe-stacks \
-    --stack-name ${PREFIX}-ggc-${THING_NAME} \
-    --query 'Stacks[0].Outputs[?OutputKey==`CertificatePem`].OutputValue' \
+    --stack-name ${STACK_NAME} \
+    --query 'Stacks[0].Outputs[?OutputKey==`certificatePem`].OutputValue' \
     --region ${AWS_REGION} \
     --output text)
 
 certificatePrivateKey=$(aws cloudformation describe-stacks \
-    --stack-name ${PREFIX}-ggc-${THING_NAME} \
-    --query 'Stacks[0].Outputs[?OutputKey==`CertificatePrivateKey`].OutputValue' \
+    --stack-name ${STACK_NAME} \
+    --query 'Stacks[0].Outputs[?OutputKey==`privateKey`].OutputValue' \
     --region ${AWS_REGION} \
     --output text)
 
 iotEndpoint=$(aws cloudformation describe-stacks \
-    --stack-name ${PREFIX}-ggc-${THING_NAME} \
-    --query 'Stacks[0].Outputs[?OutputKey==`IoTEndpoint`].OutputValue' \
+    --stack-name ${STACK_NAME} \
+    --query 'Stacks[0].Outputs[?OutputKey==`iotEndpoint`].OutputValue' \
     --region ${AWS_REGION} \
     --output text)
 

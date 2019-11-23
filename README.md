@@ -16,4 +16,4 @@ We will be covering all existing and future features of Greengrass with a strong
   * Secret Manager [Incomplete]
   * Logging [Incomplete]
 * Device Defender
-  * Detect & Mitigate [Incomplete]
+  * Detect [Incomplete]

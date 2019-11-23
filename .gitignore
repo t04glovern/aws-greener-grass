@@ -1,5 +1,5 @@
 .vscode/
-aws/certs/
-aws/config/
-aws/*-setup.tar.gz
+certs/
+config/
+*-setup.tar.gz
 greengrass-*.tar.gz

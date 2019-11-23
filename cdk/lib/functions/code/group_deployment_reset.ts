@@ -42,13 +42,16 @@ def find_group(thingName):
             response_auth = group['Id']
             return(response_auth)
 
-def manage_greengrass_role(cmd):
+def manage_gg_role(cmd):
     if cmd == 'CREATE':
-        r = iam.create_role(
-            RoleName=role_name,
-            AssumeRolePolicyDocument='{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Service": "greengrass.amazonaws.com"},"Action": "sts:AssumeRole"}]}',
-            Description='Role for the greener grass blog post',
-        )
+        try:
+            r = iam.create_role(
+                RoleName=role_name,
+                AssumeRolePolicyDocument='{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Service": "greengrass.amazonaws.com"},"Action": "sts:AssumeRole"}]}',
+                Description='GGC Role',
+            )
+        except ClientError:
+            r = iam.get_role(RoleName=role_name)
         role_arn = r['Role']['Arn']
         iam.attach_role_policy(
             RoleName=role_name,
@@ -77,7 +80,7 @@ def handler(event, context):
                 c.get_service_role_for_account()
                 result = cfnresponse.SUCCESS
             except ClientError as e:
-                manage_greengrass_role('CREATE')
+                manage_gg_role('CREATE')
                 logger.info('Greengrass service role created')
                 result = cfnresponse.SUCCESS
         elif event['RequestType'] == 'Delete':
@@ -90,7 +93,7 @@ def handler(event, context):
                 )
                 result = cfnresponse.SUCCESS
                 logger.info('Forced reset of Greengrass deployment')
-                manage_greengrass_role('DELETE')
+                manage_gg_role('DELETE')
             else:
                 logger.error('No group Id for thing: %s found' % thingName)
     except ClientError as e:
