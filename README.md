@@ -4,6 +4,12 @@ AWS IoT Greengrass a service that has grown a lot in the last couple years. This
 
 We will be covering all existing and future features of Greengrass with a strong focus on practical examples you can follow along with.
 
+## Released Blog posts
+
+* [Greener Grass - Device Setup](https://devopstar.com/2019/11/24/greener-grass-device-setup/)
+* [Greener Grass - Device Setup - Raspberry Pi](https://devopstar.com/2019/11/24/greener-grass-device-setup-raspberry-pi/)
+* [Greener Grass - Device Defender - Detect](https://devopstar.com/2019/11/24/greener-grass-device-defender-detect/)
+
 ## Contents
 
 * [Greengrass Device Setup](.blog/device-setup/README.md)

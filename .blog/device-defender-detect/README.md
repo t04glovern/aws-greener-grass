@@ -28,7 +28,7 @@ Some typical security incidents that Device Defender Detect might be able to rep
 
 ### Detect Metrics
 
-The metrics that are interpreted are low level and predominantly network related. Because of this it is our responsibility to publish these datapoints ourselves to topics on our Thing. The two topics used by Device Defender are:
+The metrics that are interpreted are low level and predominantly network related. Because of this it is our responsibility to publish these data-points ourselves to topics on our Thing. The two topics used by Device Defender are:
 
 ```bash
 $aws/things/THING_NAME/Defender/metrics/json
@@ -69,13 +69,13 @@ There is an offical SDK for running the agent available for both:
 * [python](https://github.com/aws-samples/aws-iot-device-defender-agent-sdk-python)
 * [c](https://github.com/aws-samples/aws-iot-device-defender-agent-c)
 
-The general idea is that a status update should be published regularly; AWS IoT documentation recommends every 5 minutes to avoid trottling.
+The general idea is that a status update should be published regularly; AWS IoT documentation recommends every 5 minutes to avoid throttling.
 
 ### Device Defender Connector
 
-You are probably saying to yourself "Ok, that seems a little difficult, is there a simple way to publish metrics?". The answer is actually Yes!, assuming you are running Greengrass. Connectors are turnkey packages that can run on your Greengrass Core for you with a few simple clicks. There are [quite a number of connectors](https://docs.aws.amazon.com/greengrass/latest/developerguide/connectors.html) available, however for this post we will be focusing on the [Device Defender Connector](https://docs.aws.amazon.com/greengrass/latest/developerguide/device-defender-connector.html).
+You are probably saying to yourself "Okay, that seems a little difficult, is there a simple way to publish metrics?". The answer is actually Yes!, assuming you are running Greengrass. Connectors are turnkey packages that can run on your Greengrass Core for you with a few simple clicks. There are [quite a number of connectors](https://docs.aws.amazon.com/greengrass/latest/developerguide/connectors.html) available, however for this post we will be focusing on the [Device Defender Connector](https://docs.aws.amazon.com/greengrass/latest/developerguide/device-defender-connector.html).
 
-The connector just a lambda that encapsultates all the work mentioned above around publishing metrics, however it is fully managed for you on Greengrass.
+The connector just a lambda that encapsulates all the work mentioned above around publishing metrics, however it is fully managed for you on Greengrass.
 
 #### Connector Dependencies
 
@@ -86,7 +86,7 @@ pip install psutil
 pip install cbor
 ```
 
-The `/proc` path also needs to be exposed as a local volume resource. If you deployed your Greengrass device using the code in [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) then by default all this configuration would have been done for you. If you need to perform these steps yourself; navigate to the `Resources` section of your Greengrass Core
+The `/proc` path also needs to be exposed as a local volume resource. If you deployed your Greengrass device using the code in [Greener Grass - Greengrass Device Setup](../device-setup/README.md) then by default all this configuration would have been done for you. If you need to perform these steps yourself; navigate to the `Resources` section of your Greengrass Core
 
 ![Device Defender Detect Resources](img/device-defender-detect-local-resource-01.png)
 
@@ -94,15 +94,15 @@ Create a new local resource and setup the following settings
 
 ![Device Defender Detect Local Resource Configuration](img/device-defender-detect-local-resource-02.png)
 
-Once that's complete move onto the next step where we'll begin to configure our Device Defender Connector
+Once that's complete move onto the next step where we'll begin to configure our Device Defender Connector.
 
 #### Connector Deployment
 
-If you used the deployment in [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) then the connector deployment also would have been setup for you as well. If you want to perform this step yourself; navigate to the `Connectors` section of your Greengrass Core
+If you used the deployment in [Greener Grass - Greengrass Device Setup](../device-setup/README.md) then the connector deployment also would have been setup for you as well. If you want to perform this step yourself; navigate to the `Connectors` section of your Greengrass Core
 
 ![Device Defender Detect Connectors](img/device-defender-detect-connectors-01.png)
 
-Create a new connector of type Device Defender with the following configuration
+Create a new connector of type Device Defender with the following configuration.
 
 **Note**: The Resource directory for `/proc` should be pointed to the Local Resource created in the previous step.
 
@@ -227,7 +227,7 @@ When a violation occurs we are able to view the event history under the Violatio
 
 ![Device Defender Violation History](img/device-defender-violations-01.png)
 
-If you click into the transition values you are able to explore a breakdown of the metrics at any point in time during and after the violation occured. Below is an example of the Packets out metric during a violation. This gives us a good indication of when the exfiltration of data took place.
+If you click into the transition values you are able to explore a breakdown of the metrics at any point in time during and after the violation occurred. Below is an example of the Packets out metric during a violation. This gives us a good indication of when the exfiltration of data took place.
 
 ![Device Defender Violation Metrics](img/device-defender-violations-02.png)
 
@@ -235,7 +235,7 @@ Perhaps we not want to view the destination IP addresses of the traffic during t
 
 ![Device Defender Violation Destination IPs](img/device-defender-violations-03.png)
 
-### What's Next
+## What's Next
 
 From here you can begin to design a number of different security profiles for your organization. Running these profiles aren't esspecially expensive so the way I see it, it's worth having a few core rules enabled.
 
