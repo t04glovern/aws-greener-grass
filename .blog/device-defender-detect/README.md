@@ -1,12 +1,14 @@
-# AWS IoT - Device Defender Detect
+# Greener Grass - Device Defender - Detect
 
-AWS IoT Device Defender provides a suite of options for Audit, Detection and Mitigation of IoT related security threats. While you are able to benefit by just using the default settings; there is so much more that can be accomplished if you dig a little deeper into the Device Defender offering.
+[AWS IoT Device Defender](https://aws.amazon.com/iot-device-defender/) provides a suite of options for Audit, Detection and Mitigation of IoT related security threats. While you are able to benefit by just using the default settings; there is so much more that can be accomplished if you dig a little deeper into the Device Defender offering.
 
 In this post we dive into Detect; a sub feature of Device Defender Detect that allows you to craft your own detection profiles using both cloud-side and device-side metrics.
 
 ## Requirements
 
-This post is part of a larger series where we delve into some of the more advanced features of AWS IoT Greengrass. The code in the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) will help boostrap all the resources you will need to run this portion of the tutorials.
+This post is part of a larger series where we delve into some of the more advanced features of AWS IoT Greengrass. The code in the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) will help boostrap all the resources you will need to run this portion of the tutorials. If you would like the most seamless learning experience, ensure you have completed the following posts
+
+* [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
 
 Don't worry if you aren't able to deploy! The information below doesn't contain anything specific to our environment.
 

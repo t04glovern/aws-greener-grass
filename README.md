@@ -6,14 +6,12 @@ We will be covering all existing and future features of Greengrass with a strong
 
 ## Contents
 
-* Introduction to AWS IoT Greengrass [Incomplete]
-* Greengrass Device Setup
-  * Raspberry Pi [Incomplete]
-  * NVIDIA Jetson Nano [Incomplete]
+* [Greengrass Device Setup](.blog/device-setup/README.md)
+  * [Raspberry Pi](.blog/device-setup-raspberry-pi/README.md)
 * Greengrass
-  * OTA Update [Incomplete]
   * Machine Learning [Incomplete]
   * Secret Manager [Incomplete]
   * Logging [Incomplete]
+  * OTA Update [Incomplete]
 * Device Defender
-  * Detect [Incomplete]
+  * [Detect](.blog/device-defender-detect/README.md)
