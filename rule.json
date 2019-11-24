@@ -1,0 +1,27 @@
+{
+    "securityProfileName": "DataExfiltrationCheck",
+    "securityProfileDescription": "Alerts on a possible data exfiltration attempt on devices",
+    "behaviors": [
+        {
+            "name": "PacketExfiltration",
+            "metric": "aws:all-packets-out",
+            "criteria": {
+                "comparisonOperator": "greater-than",
+                "durationSeconds": 300,
+                "consecutiveDatapointsToAlarm": 1,
+                "consecutiveDatapointsToClear": 1,
+                "statisticalThreshold": {
+                    "statistic": "p99.99"
+                }
+            }
+        }
+    ],
+    "additionalMetricsToRetain": [
+        "aws:num-connection-attempts",
+        "aws:destination-ip-addresses",
+        "aws:all-packets-out",
+        "aws:all-packets-in",
+        "aws:source-ip-address",
+        "aws:num-messages-sent"
+    ]
+}

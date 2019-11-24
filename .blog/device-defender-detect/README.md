@@ -113,3 +113,130 @@ When the next deployment of your Greengrass Core happens the Device Defender Con
 ### Security Profiles
 
 Now that metrics are flowing in, we have to start creating some security profiles that define what bad behaviour looks like.
+
+In the follow section we'll explore a use case and setup a profile via the GUI and the CLI.
+
+#### Data Exfiltration Check GUI
+
+The first rule we will setup is a data exfiltration check. This rule is setup to detect anomilies in the amount of outbounch traffic coming off the device.
+
+Think of the following scenario where a bad actor connects to your device somehow and begins to either mirror or send data to their own server. We want to setup a rule that detects a variation in the amount of traffic, and report information when the event does occur.
+
+To create a new rule, navigate to [Device Defender > Detect > Security Profiles](https://console.aws.amazon.com/iot/home?region=us-east-1#/dd/securityProfilesHub) and create a new security profile.
+
+![Device Defender Security Profile Create](img/device-defender-security-profile-01.png)
+
+The behavour creation screen might look confusing but when you break it down it is actually fairly simple. In our case we want to give our rule the basic name and description to start with.
+
+* **Name**: DataExfiltrationCheck
+* **Description**: Alerts on a possible data exfiltration attempt on devices
+
+Under behaviour, we would like to setup an alert that triggers on the number of **Packets out** when there's a statistical anomaly that is greater then the usual traffic. To accomplish this the following options are set:
+
+* **Name**: PacketExfiltration
+* **Metric**: Packets out
+* **Check Type**: Statistical Threshold
+* **Operator**: Greater than
+* **Statistical Threshold**: p99.99 (however feel free to change this based on the consistency of the data flows you work with)
+* **Duration**: 5 minutes
+* **Datapoints to Alarm**: 1
+* **Datapoints to Clear**: 1
+
+The idea is that if there is a significant change in data flows outbound that occurs over 5 minutes, fire off a security alarm after one instance of this. The alarm will clear after one cycle of 5 minutes where the anomaly doesn't occur.
+
+![Device Defender Security Profile Data Exfiltration Check](img/device-defender-security-profile-02.png)
+
+The next piece of information that will be asked for is the Additional Metrics to retains. These selected metrics are data points that will be plotted for you automatically when digging into a security event. Usually it's a good idea to select metrics that are likely to be helpful while investigation is actioned.
+
+For our use-case we select the following:
+
+* Connection attempts
+* Destination IPs
+* Messages sent
+* Packets in
+* Packets out
+* Source IP
+
+![Device Defender Security Profile Metrics to Retain](img/device-defender-security-profile-03.png)
+
+Click next and you will be provided with options to define SNS topics that can be triggered when this security event fires. For now this is out of scope of this tutorial so we will skip it.
+
+Finally you will need to define what you would like to attach the security profile to. In this case we would like to attach it to **All things**.
+
+![Device Defender Security Profile Attach To](img/device-defender-security-profile-04.png)
+
+Hit next, and Save the rule for it to be put into effect.
+
+#### Data Exfiltration Check CLI
+
+The steps above are very manual, so you'll be happy to know that this can all be scripted by using `aws-cli` commands. Sometime in the future hopefully we also get CloudFormation support!
+
+To create a security profile for the information above, save the following json to a file called something like `rule.json`
+
+```json
+{
+    "securityProfileName": "DataExfiltrationCheck",
+    "securityProfileDescription": "Alerts on a possible data exfiltration attempt on devices",
+    "behaviors": [
+        {
+            "name": "PacketExfiltration",
+            "metric": "aws:all-packets-out",
+            "criteria": {
+                "comparisonOperator": "greater-than",
+                "durationSeconds": 300,
+                "consecutiveDatapointsToAlarm": 1,
+                "consecutiveDatapointsToClear": 1,
+                "statisticalThreshold": {
+                    "statistic": "p99.99"
+                }
+            }
+        }
+    ],
+    "additionalMetricsToRetain": [
+        "aws:num-connection-attempts",
+        "aws:destination-ip-addresses",
+        "aws:all-packets-out",
+        "aws:all-packets-in",
+        "aws:source-ip-address",
+        "aws:num-messages-sent"
+    ]
+}
+```
+
+Run the following command to create the security profile defined in the json file.
+
+```bash
+aws iot create-security-profile --cli-input-json file://rule.json
+# {
+#     "securityProfileName": "DataExfiltrationCheck",
+#     "securityProfileArn": "arn:aws:iot:us-east-1:123456789012:securityprofile/DataExfiltrationCheck"
+# }
+```
+
+Then attach the profile to a thing group, in our case we want to attach it to all things.
+
+```bash
+aws iot attach-security-profile \
+    --security-profile-name "DataExfiltrationCheck" \
+    --security-profile-target-arn "arn:aws:iot:us-east-1:123456789012:all/things"
+```
+
+### Explore Violation
+
+When a violation occurs we are able to view the event history under the Violations tab of the thing.
+
+![Device Defender Violation History](img/device-defender-violations-01.png)
+
+If you click into the transition values you are able to explore a breakdown of the metrics at any point in time during and after the violation occured. Below is an example of the Packets out metric during a violation. This gives us a good indication of when the exfiltration of data took place.
+
+![Device Defender Violation Metrics](img/device-defender-violations-02.png)
+
+Perhaps we not want to view the destination IP addresses of the traffic during the time of the event. We can do this by switching to the Destination IPs metrics and find a list of the IPs the device called out to.
+
+![Device Defender Violation Destination IPs](img/device-defender-violations-03.png)
+
+### What's Next
+
+From here you can begin to design a number of different security profiles for your organization. Running these profiles aren't esspecially expensive so the way I see it, it's worth having a few core rules enabled.
+
+Look out for a future post on how we can setup some simple alerting for Device defender, and then even mitigate problems automatically using Mitigation actions.
