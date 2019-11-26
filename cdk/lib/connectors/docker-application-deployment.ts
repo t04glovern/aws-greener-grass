@@ -20,6 +20,7 @@ export class DockerApplicationDeployment extends cdk.Construct {
       parameters: {
         'DockerComposeFileS3Bucket': `${props.composeFileBucket}`,
         'DockerComposeFileS3Key': `${props.composeFileKey}`,
+        'DockerComposeFileDestinationPath': '/home/ggc_user/compose',
         'DockerContainerStatusLogFrequency': '30'
       }
     }
