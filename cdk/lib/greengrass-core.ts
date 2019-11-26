@@ -61,7 +61,8 @@ export class GreengrassCore extends cdk.Stack {
      * Greengrass - ConnectorDefinition
      */
     const greengrass_connector_def = new ConnectorDefinition(this, 'greengrass-connector-def', {
-      deviceName
+      deviceName,
+      greengrassRole: greengrass_role.role
     });
 
     /**

@@ -8,7 +8,7 @@ export interface IGreengrassRole {
 
 export class GreengrassRole extends cdk.Construct {
 
-  private readonly role: Role;
+  public readonly role: Role;
   public readonly roleArn: string;
 
   constructor(scope: cdk.Construct, id: string, props?: IGreengrassRole) {
