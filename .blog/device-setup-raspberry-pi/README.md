@@ -117,9 +117,9 @@ To confirm that all prerequisites are fulfilled we'll use the [Greengrass Depend
 
 ```bash
 mkdir /home/pi/Downloads && cd /home/pi/Downloads
-mkdir greengrass-dependency-checker-GGCv1.9.x && cd greengrass-dependency-checker-GGCv1.9.x
-wget https://github.com/aws-samples/aws-greengrass-samples/raw/master/greengrass-dependency-checker-GGCv1.9.x.zip
-unzip greengrass-dependency-checker-GGCv1.9.x.zip && cd greengrass-dependency-checker-GGCv1.9.x
+mkdir greengrass-dependency-checker-GGCv1.10.x && cd greengrass-dependency-checker-GGCv1.10.x
+wget https://github.com/aws-samples/aws-greengrass-samples/raw/master/greengrass-dependency-checker-GGCv1.10.x.zip
+unzip greengrass-dependency-checker-GGCv1.10.x.zip && cd greengrass-dependency-checker-GGCv1.10.x
 sudo modprobe configs
 sudo ./check_ggc_dependencies | more
 ```
@@ -145,13 +145,13 @@ In this case my architecture is `armv6l` so from the [Greengrass download page d
 
 ```bash
 # Download the `armv6l` tar
-wget https://d1onfpft10uf5o.cloudfront.net/greengrass-core/downloads/1.9.4/greengrass-linux-armv6l-1.9.4.tar.gz
+wget https://d1onfpft10uf5o.cloudfront.net/greengrass-core/downloads/1.10.0/greengrass-linux-armv6l-1.10.0.tar.gz
 ```
 
 Now that we have the files we need, copy them all to the Raspberry Pi
 
 ```bash
-scp greengrass-linux-armv6l-1.9.4.tar.gz pi@raspberrypi.local:/home/pi
+scp greengrass-linux-armv6l-1.10.0.tar.gz pi@raspberrypi.local:/home/pi
 ```
 
 ## Extract Greengrass Files
@@ -159,7 +159,7 @@ scp greengrass-linux-armv6l-1.9.4.tar.gz pi@raspberrypi.local:/home/pi
 SSH back onto the Raspberry Pi and extract the two file bundles we just downloaded by running the following
 
 ```bash
-sudo tar -xzvf greengrass-<ARCHITECTURE>-1.9.4.tar.gz -C /
+sudo tar -xzvf greengrass-linux-armv6l-1.10.0.tar.gz -C /
 ```
 
 Confirm everything copied across correctly by running the following

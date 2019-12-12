@@ -1,0 +1,5 @@
+version: '3.3'
+
+services:
+  hello-world:
+    image: arm32v7/hello-world

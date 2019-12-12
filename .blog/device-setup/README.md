@@ -69,7 +69,7 @@ Ensure to replace:
 cd cdk
 
 # Copy the device certificate bundle
-scp aws/*-setup.tar.gz user@device:/home/user
+scp *-setup.tar.gz user@device:/home/user
 # Copy a seervice script that will help us install things
 scp deploy-service.sh user@device:/home/user
 ```

@@ -38,7 +38,7 @@ echo -n "${certificatePem}" > certs/${certificateId}.pem
 echo -n "${certificatePrivateKey}" > certs/${certificateId}.key
 wget -O certs/root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
 
-cat <<EOT > config/config.json          
+cat <<EOT > config/config.json
 {
     "coreThing" : {
         "caPath" : "root.ca.pem",
