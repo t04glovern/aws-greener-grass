@@ -1,8 +1,52 @@
-# Docker for Greengrass
+# Docker Deployments on Greengrass
 
-## Setup Docker
+AWS IoT Greengrass recently got Docker support; a much needed addition to the suite of edge tooling available at our disposal. As with most new IoT Greengrass feature, it can be a bit bumped to get setup with. I would know, I fought through the setup process on the day of release and encounted a couple quirks that I figure I'll share with the world in the form of an unoffical guide.
 
-Installing Docker is obviously required for this tutorial, however depending on what device you are using will determine how you install Docker.
+What you will learn if you read this guide:
+
+* Installing Docker & docker-compose onto a Raspberry Pi device
+* Learn what dependencies you will need installed on non Raspberry Pi devices, and how to find guides for those installations
+* How to configure the Docker Application Deployment Connector for IoT Greengrass
+* Optionally learn how the deployment process can be codified with [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
+
+## Requirements
+
+This post is part of a larger series where we delve into some of the more advanced features of AWS IoT Greengrass. The code in the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) will help boostrap all the resources you will need to run this portion of the tutorials. If you would like the most seamless learning experience, ensure you have completed the following posts
+
+* [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
+
+The information below doesn't contain anything super specific to our environment. Once you have a basic device setup and connected to Greengrass, you'll be able to continue with this guide.
+
+## Docker Application Deployment Connector
+
+Under the hood Docker deployments for Greengrass are just made up of a lambda function orchastrating docker-compose commands for you. This process is bundled up into what's called a [Greengrass Connector](https://docs.aws.amazon.com/greengrass/latest/developerguide/connectors-list.html).
+
+There are many connectors available, however the one we're interested in is [Docker Application Deployment](https://docs.aws.amazon.com/greengrass/latest/developerguide/docker-app-connector.html). If you take a look at the requirements for this connector you can begin to see what we will need installed on our Greengrass core device.
+
+* **AWS IoT Greengrass Core v1.10**
+  * Should be covered if you've installed Greengrass recently
+* **Python 3.7**
+  * If running python3.6 instead, upgrade using a relevant guide for your OS
+* **A minimum of 36 MB RAM**
+  * Hopefully this isn't an issue for you. Note Docker might not always be the best approach.
+* **Docker Engine v1.9.1**
+  * We'll cover this below
+* **Docker Compose**
+  * We'll cover this below
+* **Linux user with docker daemon permissions**
+  * `sudo usermod -aG docker USERNAME` should suffice, but check below beforehand.
+
+For the remaining requirements, I'll hold off discussing them until later in the guide.
+
+## Install Dependencies
+
+The first step is arguably the most difficult (depending on what platform you are using). We need to install [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/) onto our Greengrass Core.
+
+**NOTE**: _Since most of the complexity around getting Docker installed come from the ARM platforms (Raspberry Pi), I've included this setup in the guide. For x86_64 architectures, following the standard documentation (linked below) should work fine._
+
+### Install Docker [Raspberry Pi]
+
+Docker is obviously required for this tutorial, however depending on what device you are using will determine how you install Docker.
 
 I recommend referring to the offical [Docker installation documentation here](https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/debian/#set-up-the-repository), however if you are running a Raspberry Pi you can try the commands below:
 
@@ -40,7 +84,7 @@ sudo apt-get upgrade
 systemctl start docker.service
 ```
 
-### Install docker-compose
+### Install docker-compose [Raspberry Pi]
 
 The CLI command docker-compose is also required for the Docker connector to function. This can be installed again by following the [offical documentation on the docker website](https://docs.docker.com/compose/install/)
 
