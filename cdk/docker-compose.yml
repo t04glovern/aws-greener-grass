@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  ui:
+    image: hypriot/rpi-dockerui
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    expose:
+      - 9000
+    ports:
+      - 80:9000
+  # ui:
+  #   image: portainer/portainer
+  #   restart: always
+  #   volumes:
+  #     - '/var/run/docker.sock:/var/run/docker.sock'
+  #   expose:
+  #     - 9000
+  #   ports:
+  #     - 80:9000

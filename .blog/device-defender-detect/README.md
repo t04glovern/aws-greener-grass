@@ -86,6 +86,12 @@ pip install psutil
 pip install cbor
 ```
 
+**NOTE**: *If you are running on a Raspberry Pi (ARM based) or an architecture that isn't x86 you will also need to install the Device Defender SDK yourself*
+
+```bash
+pip install AWSIoTDeviceDefenderAgentSDK
+```
+
 The `/proc` path also needs to be exposed as a local volume resource. If you deployed your Greengrass device using the code in [Greener Grass - Greengrass Device Setup](../device-setup/README.md) then by default all this configuration would have been done for you. If you need to perform these steps yourself; navigate to the `Resources` section of your Greengrass Core
 
 ![Device Defender Detect Resources](img/device-defender-detect-local-resource-01.png)

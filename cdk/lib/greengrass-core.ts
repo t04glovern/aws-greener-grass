@@ -61,7 +61,8 @@ export class GreengrassCore extends cdk.Stack {
      * Greengrass - ConnectorDefinition
      */
     const greengrass_connector_def = new ConnectorDefinition(this, 'greengrass-connector-def', {
-      deviceName
+      deviceName,
+      greengrassRole: greengrass_role.role
     });
 
     /**
@@ -95,6 +96,9 @@ export class GreengrassCore extends cdk.Stack {
     });
     new cdk.CfnOutput(this, 'greengrassGroupId', {
       value: greengrass_group.attrId
+    });
+    new cdk.CfnOutput(this, 'dockerApplicationBucket', {
+      value: greengrass_connector_def.dockerBucket.bucketName
     });
     new cdk.CfnOutput(this, 'otaUpdateRole', {
       value: ota_update_role.roleArn
