@@ -9,7 +9,7 @@ We will be covering all existing and future features of Greengrass with a strong
 * [Greener Grass - Device Setup](https://devopstar.com/2019/11/24/greener-grass-device-setup/)
 * [Greener Grass - Device Setup - Raspberry Pi](https://devopstar.com/2019/11/24/greener-grass-device-setup-raspberry-pi/)
 * [Greener Grass - Device Defender - Detect](https://devopstar.com/2019/11/24/greener-grass-device-defender-detect/)
-* [Greener Grass – Docker Deployments](https://devopstar.com/2019/12/14/greener-grass-docker-deployments/)
+* [Greener Grass - Docker Deployments](https://devopstar.com/2019/12/14/greener-grass-docker-deployments/)
 
 ## Contents
 
