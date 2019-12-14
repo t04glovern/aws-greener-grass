@@ -1,5 +1,21 @@
 version: '3.3'
 
 services:
-  hello-world:
-    image: arm32v7/hello-world
+  ui:
+    image: hypriot/rpi-dockerui
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    expose:
+      - 9000
+    ports:
+      - 80:9000
+  # ui:
+  #   image: portainer/portainer
+  #   restart: always
+  #   volumes:
+  #     - '/var/run/docker.sock:/var/run/docker.sock'
+  #   expose:
+  #     - 9000
+  #   ports:
+  #     - 80:9000
