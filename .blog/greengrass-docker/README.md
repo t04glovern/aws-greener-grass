@@ -1,6 +1,6 @@
-# Docker Deployments on Greengrass
+# Greener Grass - Docker Deployments
 
-AWS IoT Greengrass recently got Docker support; a much needed addition to the suite of edge tooling available at our disposal. As with most new IoT Greengrass feature, it can be a bit bumped to get setup with. I would know, I fought through the setup process on the day of release and encounted a couple quirks that I figure I'll share with the world in the form of an unoffical guide.
+AWS IoT Greengrass recently got Docker support; a much needed addition to the suite of edge tooling available at our disposal. As with most new IoT Greengrass feature, it can be a bit bumped to get setup with. I would know, I fought through the setup process on the day of release and ran into a couple quirks that I figure I'll share with the world in the form of an unofficial guide.
 
 What you will learn if you read this guide:
 
@@ -11,7 +11,7 @@ What you will learn if you read this guide:
 
 ## Requirements
 
-This post is part of a larger series where we delve into some of the more advanced features of AWS IoT Greengrass. The code in the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) will help boostrap all the resources you will need to run this portion of the tutorials. If you would like the most seamless learning experience, ensure you have completed the following posts
+This post is part of a larger series where we delve into some of the more advanced features of AWS IoT Greengrass. The code in the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) will help bootstrap all the resources you will need to run this portion of the tutorials. If you would like the most seamless learning experience, ensure you have completed the following posts
 
 * [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
 
@@ -19,7 +19,7 @@ The information below doesn't contain anything super specific to our environment
 
 ## Docker Application Deployment Connector
 
-Under the hood Docker deployments for Greengrass are just made up of a lambda function orchastrating docker-compose commands for you. This process is bundled up into what's called a [Greengrass Connector](https://docs.aws.amazon.com/greengrass/latest/developerguide/connectors-list.html).
+Under the hood Docker deployments for Greengrass are just made up of a lambda function orchestrating docker-compose commands for you. This process is bundled up into what's called a [Greengrass Connector](https://docs.aws.amazon.com/greengrass/latest/developerguide/connectors-list.html).
 
 There are many connectors available, however the one we're interested in is [Docker Application Deployment](https://docs.aws.amazon.com/greengrass/latest/developerguide/docker-app-connector.html). If you take a look at the requirements for this connector you can begin to see what we will need installed on our Greengrass core device.
 
@@ -125,7 +125,7 @@ We are now at the point where we have all dependencies we need in order to deplo
 
 ### Greengrass Bucket Role
 
-If you didn't deploy your Greengrass group with the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) project, it's important that you edit the existing role with the privilages to pull from an S3 bucket.
+If you didn't deploy your Greengrass group with the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) project, it's important that you edit the existing role with the privileges to pull from an S3 bucket.
 
 **NOTE**: It's make sure you have an S3 bucket to use for storing the docker-compose file. This can be created either from the CLI by running the following:
 
@@ -133,17 +133,15 @@ If you didn't deploy your Greengrass group with the [t04glovern/aws-greener-gras
 aws s3 mb s3://unique-bucket-name
 ```
 
-Alternatively you can [create a bucket from the UI](https://s3.console.aws.amazon.com/s3/home?region=us-east-1#)
-
-Next navigate to your Greengrass group and retrieve the role name attached to your device
+Alternatively you can [create a bucket from the UI](https://s3.console.aws.amazon.com/s3/home?region=us-east-1#). Next navigate to your Greengrass group and retrieve the role name attached to your device.
 
 ![Greengrass Docker edit role get name](img/greengrass-docker-edit-role-01.png)
 
-Go into the [IAM Role console](https://console.aws.amazon.com/iam/home?region=us-east-1#/roles) and find the role currently attached. Proceed to edit the policy attached to the role (or add a new policy if none exist)
+Go into the [IAM Role console](https://console.aws.amazon.com/iam/home?region=us-east-1#/roles) and find the role currently attached. Proceed to edit the policy attached to the role (or add a new policy if none exist).
 
 ![Greengrass Docker edit role policy](img/greengrass-docker-edit-role-02.png)
 
-Add the following JSON statement to the policy (merge in with any existing policy statements that might already exist)
+Add the following JSON statement to the policy (merge in with any existing policy statements that might already exist).
 
 ```json
 {
@@ -171,7 +169,7 @@ Congratulations! You have now got a bucket and permissions that can be used to d
 
 To deploy docker containers to our device we first need a docker-compose file with a definition of the services we want to run. This docker-compose file should be placed into an S3 bucket that the Greengrass group has permissions to pull from.
 
-Create a new `docker-compose.yml` file in the root of the bucket we created prior. Put the following contents in the file
+Create a new `docker-compose.yml` file in the root of the bucket we created prior. Put the following contents in the file.
 
 ```yaml
 version: '3.3'
@@ -188,7 +186,7 @@ services:
       - 80:9000
 ```
 
-**NOTE**: *This particular docker-compose file is setup for ARM systems. If you are running x86_64 then replace the block above with portainer instead
+**NOTE**: *This particular docker-compose file is setup for ARM systems. If you are running x86_64 then replace the block above with [portainer](https://hub.docker.com/r/portainer/portainer/) instead.
 
 ```yaml
 version: '3.3'
@@ -207,7 +205,7 @@ services:
 
 ### Add Docker Connector [UI]
 
-Head to the Greengrass core connector section and click add new connector
+Head to the Greengrass core connector section and click add new connector.
 
 ![Greengrass Core add a connector](img/greengrass-docker-connectors-01.png)
 
@@ -261,9 +259,7 @@ export class DockerApplicationDeployment extends cdk.Construct {
 }
 ```
 
-This class simply takes a reference to the *docker-compose* file and location within the bucket.
-
-Then in the [cdk/lib/definitions/connector-definition.ts](../../cdk/lib/definitions/connector-definition.ts) file the connector is initialised
+This class simply takes a reference to the *docker-compose* file and location within the bucket. Then in the [cdk/lib/definitions/connector-definition.ts](../../cdk/lib/definitions/connector-definition.ts) file the connector is initialised.
 
 ```typescript
 /**
@@ -296,7 +292,7 @@ this.version = new greengrass.CfnConnectorDefinitionVersion(this, 'greengrass-co
 
 ## Testing Docker Deployment
 
-With the deployment successful we can confirm it is working a number of ways. The most obvious way is to SSH onto the Greengrass Core device and run the following docker commands to view the running containers
+With the deployment successful we can confirm it is working a number of ways. The most obvious way is to SSH onto the Greengrass Core device and run the following docker commands to view the running containers.
 
 ```bash
 docker ps -a
@@ -326,6 +322,6 @@ http://device-name/
 
 Docker is a powerful utility and having the ability to run containers on the edge is a great stepping stone forward. I would advise that you do make sure you can't achieve what you need in Lambda first before looking at containers however, as containers aren't always the best solution.
 
-Thanks to the following guides for providing some extra insite to me while I was writing.
+Thanks to the following guides for providing some extra insights to me while I was writing.
 
 * [Visualize your Raspberry Pi containers with Portainer or UI for Docker](https://blog.hypriot.com/post/new-docker-ui-portainer/)
