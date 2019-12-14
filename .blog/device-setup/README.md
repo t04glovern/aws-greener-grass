@@ -176,5 +176,5 @@ To deploy through the GUI, navigate to the [AWS IoT Greengrass portal](https://u
 Once you're finished working with Greengrass it's really easy to cleanup the AWS resources we used. Run the following command to destroy the CDK stack
 
 ```bash
-cdk deploy --context=device_name=${THING_NAME}
+cdk destroy --context=device_name=${THING_NAME}
 ```

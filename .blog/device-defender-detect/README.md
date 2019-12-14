@@ -243,6 +243,6 @@ Perhaps we not want to view the destination IP addresses of the traffic during t
 
 ## What's Next
 
-From here you can begin to design a number of different security profiles for your organization. Running these profiles aren't esspecially expensive so the way I see it, it's worth having a few core rules enabled.
+From here you can begin to design a number of different security profiles for your organisation. Running these profiles aren't especially expensive so the way I see it, it's worth having a few core rules enabled.
 
 Look out for a future post on how we can setup some simple alerting for Device defender, and then even mitigate problems automatically using Mitigation actions.
