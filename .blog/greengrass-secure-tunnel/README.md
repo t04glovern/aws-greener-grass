@@ -4,6 +4,14 @@
 
 As usual we will be tackling this problem from the Raspberry Pi (ARM) perspective. I am actually shooting myself in the foot on purpose however, as the documentation for this process is extremely lacking currently.
 
+### Install Pre-requirements
+
+```bash
+sudo apt-get install cmake git
+```
+
+### Install requirements
+
 ```bash
 # Zlib dependency
 cd ~
@@ -29,7 +37,6 @@ tar xzvf /tmp/protobuf-all-3.11.2.tar.gz
 cd protobuf-3.11.2
 mkdir build
 cd build
-sudo apt-get install cmake
 cmake ../cmake
 make
 sudo make install
@@ -46,14 +53,24 @@ cd build
 cmake ../
 make
 sudo make install
+```
 
-# local proxy
+### Install localproxy
+
+```bash
+cd ~
 git clone https://github.com/aws-samples/aws-iot-securetunneling-localproxy
 cd aws-iot-securetunneling-localproxy
 mkdir build
 cd build
-cmake ../ -DCMAKE_TOOLCHAIN_FILE=example/crosscompile/raspberry_pi_3_b_plus.cmake.tc
+cmake ../ -DCMAKE_CXX_FLAGS=-latomic
 make
+
+# Install binary
+sudo cp bin/* /bin/
+
+# Test localproxy
+localproxytest
 ```
 
 ## Attribution
