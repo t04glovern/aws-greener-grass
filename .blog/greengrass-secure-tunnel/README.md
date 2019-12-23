@@ -1,16 +1,39 @@
 # Greengrass - Secure Tunnel
 
-## Raspberry Pi Setup
+## Build localproxy
 
-As usual we will be tackling this problem from the Raspberry Pi (ARM) perspective. I am actually shooting myself in the foot on purpose however, as the documentation for this process is extremely lacking currently.
+---
 
-### Install Pre-requirements
+As usual we will be tackling this problem from the Raspberry Pi 3B+ (armv7l) perspective. I am actually shooting myself in the foot on purpose however, as the documentation for this process is extremely lacking currently.
+
+Currently there are no mirriors of localproxy so you'll either have to:
+
+* Build it yourself
+* Use my pre-compiled mirrors
+
+### Ubuntu (x86_64)
+
+The [documentation for this compile](https://github.com/aws-samples/aws-iot-securetunneling-localproxy) should work however to save you sometime I've bundled the binaries and can be downloaded and installed from the following.
+
+```bash
+# TODO
+```
+
+### Raspberry Pi (armv7l)
+
+Instructions for the Raspberry Pi (arm7l) compile can also be found in the [aws-iot-securetunneling-localproxy repository](https://github.com/aws-samples/aws-iot-securetunneling-localproxy). Before jumping into how to compile however, you can optionally jump in and use the binaries below.
+
+```bash
+# TODO
+```
+
+#### Install pre-requirements
 
 ```bash
 sudo apt-get install cmake git
 ```
 
-### Install requirements
+#### Install requirements
 
 ```bash
 # Zlib dependency
@@ -55,7 +78,7 @@ make
 sudo make install
 ```
 
-### Install localproxy
+#### Install localproxy
 
 ```bash
 cd ~
@@ -68,9 +91,27 @@ make
 
 # Install binary
 sudo cp bin/* /bin/
+```
 
-# Test localproxy
+## Test localproxy
+
+---
+
+Now that the localproxy binary is installed you can run the preflight tests by running the following
+
+```bash
 localproxytest
+# Test server is listening on address: 127.0.0.1 and port: 39985
+# [2019-12-23 11:52:10.957851] [0x7616b3a0] [info]    Starting proxy in source mode
+# [2019-12-23 11:52:10.972793] [0x7616b3a0] [trace]   Setting up web socket...
+# [2019-12-23 11:52:10.973425] [0x7616b3a0] [info]    Attempting to establish web socket connection with endpoint wss://127.0.0.1:39985
+# [2019-12-23 11:52:11.425299] [0x7696c3a0] [info]    Disconnected from: 127.0.0.1:34989
+# ...
+# ...
+# ...
+# [2019-12-23 11:52:11.425688] [0x7696c3a0] [trace]   Both socket drains complete. Setting up TCP socket again
+# ===============================================================================
+# All tests passed (32 assertions in 2 test cases)
 ```
 
 ## Attribution
