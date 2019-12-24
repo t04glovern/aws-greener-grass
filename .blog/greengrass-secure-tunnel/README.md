@@ -340,6 +340,8 @@ There is also an option to specify a timeout on the credentials. I recommned kee
 
 ![AWS IoT Secure Tunnel Timeout settings](img/aws-iot-secure-tunnel-03.png)
 
+When the tunnel is created, make sure to save a copy of the two files it asks you to download. Specifically we will need the **sourceAccessToken**
+
 #### Secure Tunnel Create [CLI]
 
 Performing the same actions above with the CLI is just as easy.
@@ -359,11 +361,39 @@ When a connection is opened, you should see a response like the following from y
 # [2019-12-24T09:03:55.888385]{2945}[info]    Successfully established websocket connection with proxy server: wss://data.tunneling.iot.us-east-1.amazonaws.com:443
 ```
 
-This tells you that a session has opened on the destination end. Now we must open a client on our end using the `localproxy` binary from before.
+This tells you that a session has opened on the destination end. Take a copy of the `sourceAccessToken` that it spits out to your on the CLI for the next step. Now we must open a client on our end using the `localproxy` binary from before.
 
 ## localproxy Client
 
 In order to use the localproxy client, it will need to be built for your operating system. Unfortunately there aren't binaries published for all of them so the best I can offer you currently is the `x86_64` binary from before to use on a Linux operating system.
+
+* [localproxy - Ubuntu (x86_64)](https://github.com/t04glovern/aws-greener-grass/raw/master/.blog/greengrass-secure-tunnel/binaries/localproxy-x86_64)
+
+```bash
+# Download the binary and make it executable
+wget https://github.com/t04glovern/aws-greener-grass/raw/master/.blog/greengrass-secure-tunnel/binaries/localproxy-x86_64 -O localproxy
+chmod +x localproxy
+```
+
+Open up a tunnel using the `sourceAccessToken`, along with providing the port you would like to tunnel through.
+
+```bash
+./localproxy \
+    -r "us-east-1" \
+    -s "5555" \
+    -t "AQGAAXix2C93kcy5UyP3Hlyt5ckZABsAAgABQ......."
+
+# [2019-12-24T17:14:26.690125]{8685}[info]    Attempting to establish web socket connection with endpoint wss://data.tunneling.iot.us-east-1.amazonaws.com:443
+# [2019-12-24T17:14:28.104106]{8685}[info]    Web socket session ID: 0e4af2fffe6d4d67-00002f7b-00015ec0-45fd2fc3cba468d4-6860ed80
+# [2019-12-24T17:14:28.104165]{8685}[info]    Successfully established websocket connection with proxy server: wss://data.tunneling.iot.us-east-1.amazonaws.com:443
+# [2019-12-24T17:14:28.104485]{8685}[info]    Listening for new connection on port 5555
+```
+
+You should be notified that the tunnel is open and ready to use. In my case I have port 5555 listening. Now I can simply SSH to that port and provide the usually credentials I would have used to login to that device normally
+
+```bash
+ssh pi@localhost -p 5555
+```
 
 ## Attribution
 
