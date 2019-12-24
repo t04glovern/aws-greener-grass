@@ -1,0 +1,78 @@
+#!/usr/bin/python3
+
+import argparse
+import boto3
+import botocore.exceptions
+import logging
+import json
+import random
+import string
+import subprocess
+import time
+
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-a", "--rootCA",   action="store", dest="rootCAPath", default="/greengrass/certs/AmazonRootCA1.pem", help="Root CA file path")
+parser.add_argument("-c", "--cert",     action="store", dest="certificatePath", default="/greengrass/certs/device.cert.pem", help="Certificate file path")
+parser.add_argument("-k", "--key",      action="store", dest="privateKeyPath", default="/greengrass/certs/device.private.key", help="Private key file path")
+parser.add_argument("-t", "--topic",    action="store", required=True, dest="topic", help="Topic to subscribe to")
+parser.add_argument("-r", "--region",   action="store", dest="region", default="us-east-1", help="AWS region")
+parser.add_argument("-e", "--endpoint", action="store", dest="endpoint", help="AWS IoT Endpoint")
+
+# Parse Arguments
+args = parser.parse_args()
+rootCAPath = args.rootCAPath
+certificatePath = args.certificatePath
+privateKeyPath = args.privateKeyPath
+topic = args.topic
+region = args.region
+
+
+def random_client_id(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
+
+
+def tunnel_callback(client, userdata, message):
+    json_message = json.loads(message.payload.decode('utf-8'))
+    if message.topic == topic:
+        subprocess.run([
+            "localproxy",
+            "-t", json_message['clientAccessToken'],
+            "-r", region,
+            "-d", "localhost:22"
+        ])
+
+
+# Configure logging
+logger = logging.getLogger("AWSIoTPythonSDK.core")
+logger.setLevel(logging.DEBUG)
+streamHandler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+streamHandler.setFormatter(formatter)
+logger.addHandler(streamHandler)
+
+# Init IoT Client
+if args.endpoint:
+    endpoint = args.endpoint
+else:
+    try:
+        iot_client = boto3.client('iot', region_name=region)
+        iot_endpoint_response = iot_client.describe_endpoint(endpointType='iot:Data-ATS')
+        endpoint = iot_endpoint_response['endpointAddress']
+    except botocore.exceptions.NoCredentialsError as e:
+        print('Boto3 could not authenticate IoT call: {}'.format(e))
+
+# Init AWSIoTMQTTClient
+aws_iot_mqtt_client = None
+aws_iot_mqtt_client = AWSIoTMQTTClient(random_client_id())
+aws_iot_mqtt_client.configureEndpoint(endpoint, 443)
+aws_iot_mqtt_client.configureCredentials(rootCAPath, privateKeyPath, certificatePath)
+
+# Connect and subscribe to AWS IoT
+aws_iot_mqtt_client.connect()
+aws_iot_mqtt_client.subscribe(topic, 1, tunnel_callback)
+
+while True:
+    time.sleep(1)
