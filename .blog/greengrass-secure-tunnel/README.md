@@ -350,6 +350,21 @@ aws iotsecuretunneling open-tunnel \
     --timeout-config maxLifetimeTimeoutMinutes=30
 ```
 
+When a connection is opened, you should see a response like the following from your `secure_tunnel` program
+
+```bash
+# [2019-12-24T09:03:54.438901]{2945}[info]    Starting proxy in destination mode
+# [2019-12-24T09:03:54.453509]{2945}[info]    Attempting to establish web socket connection with endpoint wss://data.tunneling.iot.us-east-1.amazonaws.com:443
+# [2019-12-24T09:03:55.888157]{2945}[info]    Web socket session ID: 12871efffedc21d9-00005e57-00015f58-73ec57264871633d-780e6658
+# [2019-12-24T09:03:55.888385]{2945}[info]    Successfully established websocket connection with proxy server: wss://data.tunneling.iot.us-east-1.amazonaws.com:443
+```
+
+This tells you that a session has opened on the destination end. Now we must open a client on our end using the `localproxy` binary from before.
+
+## localproxy Client
+
+In order to use the localproxy client, it will need to be built for your operating system. Unfortunately there aren't binaries published for all of them so the best I can offer you currently is the `x86_64` binary from before to use on a Linux operating system.
+
 ## Attribution
 
 * [AWS IoT Secure Tunneling Local Proxy Reference Implementation C++](https://github.com/aws-samples/aws-iot-securetunneling-localproxy)
