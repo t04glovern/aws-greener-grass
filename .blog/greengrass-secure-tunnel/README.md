@@ -1,5 +1,30 @@
 # Greengrass - Secure Tunnel
 
+## Introduction
+
+AWS IoT Secure Tunnel is a managed proxy meant for devices positioned behind secure firewalls on remote sites. A secure tunnel can be created using temporary credentials allowing access to the device on configurable ports. The secure tunneling process requies a bidirectional link to be estabilished before communication can proceed.
+
+This post aims to demisify the setup and management process of AWS IoT Secure Tunneling by demonstrating an end to end example.
+
+## How it works
+
+I found that [the documentation on this topic](https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html) was a little lacking so I created the following diagram with annotations
+
+![AWS IoT Secure Tunnel Architecture](img/aws-secure-tunnel-architecture.png)
+
+1. Device uses pre-allocated x509 certificates with specific permissions to subscribe to the amazon managed `tunnels/notify` topic.
+2. Tunnel is opened either using the GUI or CLI. device name defined to target specific device.
+    * Device receives destination access token from its subscription to the `tunnels/notify` topic
+3. [localproxy](https://github.com/aws-samples/aws-iot-securetunneling-localproxy) runs in destination mode using the access token it received from the topic.
+    * At this point half (left side) of the secure tunnel is up and running
+4. Listener for the destination tunnel also starts up. In this example we are exposing port 22 for SSH.
+    * Note that any port / service could be exposed
+5. [localproxy](https://github.com/aws-samples/aws-iot-securetunneling-localproxy) runs in source mode using the access token generated when the tunnel was created in *step 2*.
+    * At thie point both sides of the secure tunnel are up and running.
+6. Client can now open a connection on the defined port (in this example we used port 5555) and it will be tunnelled through to the IoT device.
+
+Now that you have an idea how this process works, let's go through and implement a simple SSH tunnel to a Raspberry Pi.
+
 ## Build localproxy
 
 ---
@@ -394,6 +419,14 @@ You should be notified that the tunnel is open and ready to use. In my case I ha
 ```bash
 ssh pi@localhost -p 5555
 ```
+
+## Summary
+
+Secure Tunneling is a fantastic way to provide encrypted, temporary access to remote devices behind a firewall in the field. I also see there being a lot of opportunity to make use of this service for device vending (more on this in future posts).
+
+**NOTE**: *It should be noted that tunneling in this manner could be considered a major security risk if keys fall in the wrong hands. I recommend working with your Security teams internally to ensure they are okay with the risks associated with opening SSL tunnels.*
+
+Please reach out to me on [Twitter](https://twitter.com/nathangloverAUS) if you have any further queries or would like help designing your own system!
 
 ## Attribution
 
