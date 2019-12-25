@@ -2,9 +2,9 @@
 
 ## Introduction
 
-AWS IoT Secure Tunneling is a managed proxy meant for devices positioned behind secure firewalls on remote sites. A secure tunnel can be created using temporary credentials allowing access to the device on configurable ports. The secure tunneling process requies a bidirectional link to be estabilished before communication can proceed.
+AWS IoT Secure Tunneling is a managed proxy meant for devices positioned behind secure firewalls on remote sites. A secure tunnel can be created using temporary credentials allowing access to the device on configurable ports. The secure tunneling process requires a bidirectional link to be established before communication can proceed.
 
-This post aims to demisify the setup and management process of AWS IoT Secure Tunneling by demonstrating an end to end example.
+This post aims to demystifying the setup and management process of AWS IoT Secure Tunneling by demonstrating an end to end example.
 
 ## How it works
 
@@ -12,7 +12,7 @@ I found that [the documentation on this topic](https://docs.aws.amazon.com/iot/l
 
 ![AWS IoT Secure Tunneling Architecture](img/aws-secure-tunnel-architecture.png)
 
-1. Device uses pre-allocated x509 certificates with specific permissions to subscribe to the amazon managed `tunnels/notify` topic.
+1. Device uses x509 certificates with specific permissions to subscribe to the amazon managed `tunnels/notify` topic.
 2. Tunnel is opened either using the GUI or CLI. device name defined to target specific device.
     * Device receives destination access token from its subscription to the `tunnels/notify` topic
 3. [localproxy](https://github.com/aws-samples/aws-iot-securetunneling-localproxy) runs in destination mode using the access token it received from the topic.
@@ -20,7 +20,7 @@ I found that [the documentation on this topic](https://docs.aws.amazon.com/iot/l
 4. Listener for the destination tunnel also starts up. In this example we are exposing port 22 for SSH.
     * Note that any port / service could be exposed
 5. [localproxy](https://github.com/aws-samples/aws-iot-securetunneling-localproxy) runs in source mode using the access token generated when the tunnel was created in *step 2*.
-    * At thie point both sides of the secure tunnel are up and running.
+    * At this point both sides of the secure tunnel are up and running.
 6. Client can now open a connection on the defined port (in this example we used port 5555) and it will be tunnelled through to the IoT device.
 
 Now that you have an idea how this process works, let's go through and implement a simple SSH tunnel to a Raspberry Pi.
@@ -32,7 +32,7 @@ It would help tremendously if you have either setup or done the following:
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) installed and setup
 * Briefly skimmed the [AWS IoT Secure Tunneling documentation](https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html)
 * Have completed the device setup post: [Greengrass - Greengrass Device Setup](../device-setup/README.md)
-  * If not this, then atleast know how to create AWS IoT certificates with a policy `iot*`
+  * If not this, then at-least know how to create AWS IoT certificates with a policy `iot*`
 
 ## Build localproxy
 
@@ -146,7 +146,7 @@ sudo cp bin/* /bin/
 
 ---
 
-Now that the localproxy binary is installed you can run the preflight tests by running the following
+Now that the `localproxy` binary is installed you can run the pre-flight tests by running the following
 
 ```bash
 localproxytest
@@ -370,11 +370,11 @@ Provide details similar to the following:
 
 ![AWS IoT Secure Tunnel Settings](img/aws-iot-secure-tunnel-02.png)
 
-There is also an option to specify a timeout on the credentials. I recommned keeping this low so that if your tokens get leaked somehow, they will naturally expire.
+There is also an option to specify a timeout on the credentials. I recommend keeping this low so that if your tokens get leaked somehow, they will naturally expire.
 
 ![AWS IoT Secure Tunnel Timeout settings](img/aws-iot-secure-tunnel-03.png)
 
-When the tunnel is created, make sure to save a copy of the two files it asks you to download. Specifically we will need the **sourceAccessToken**
+When the tunnel is created, make sure to save a copy of the two files it asks you to download. Specifically we will need the **sourceAccessToken**.
 
 #### Secure Tunnel Create [CLI]
 
@@ -386,7 +386,7 @@ aws iotsecuretunneling open-tunnel \
     --timeout-config maxLifetimeTimeoutMinutes=30
 ```
 
-When a connection is opened, you should see a response like the following from your `secure_tunnel` program
+When a connection is opened, you should see a response like the following from your `secure_tunnel` program.
 
 ```bash
 # [2019-12-24T09:03:54.438901]{2945}[info]    Starting proxy in destination mode
@@ -399,7 +399,7 @@ This tells you that a session has opened on the destination end. Take a copy of 
 
 ## localproxy Client
 
-In order to use the localproxy client, it will need to be built for your operating system. Unfortunately there aren't binaries published for all of them so the best I can offer you currently is the `x86_64` binary from before to use on a Linux operating system.
+In order to use the `localproxy` client, it will need to be built for your operating system. Unfortunately there aren't binaries published for all of them so the best I can offer you currently is the `x86_64` binary from before to use on a Linux operating system.
 
 * [localproxy - Ubuntu (x86_64)](https://github.com/t04glovern/aws-greener-grass/raw/master/.blog/greengrass-secure-tunnel/binaries/localproxy-x86_64)
 
@@ -423,7 +423,7 @@ Open up a tunnel using the `sourceAccessToken`, along with providing the port yo
 # [2019-12-24T17:14:28.104485]{8685}[info]    Listening for new connection on port 5555
 ```
 
-You should be notified that the tunnel is open and ready to use. In my case I have port 5555 listening. Now I can simply SSH to that port and provide the usually credentials I would have used to login to that device normally
+You should be notified that the tunnel is open and ready to use. In my case I have port 5555 listening. Now I can simply SSH to that port and provide the usually credentials I would have used to login to that device normally.
 
 ```bash
 ssh pi@localhost -p 5555
