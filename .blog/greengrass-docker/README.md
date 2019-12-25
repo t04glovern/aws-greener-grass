@@ -1,4 +1,4 @@
-# Greener Grass - Docker Deployments
+# Greengrass - Docker Deployments
 
 AWS IoT Greengrass recently got Docker support; a much needed addition to the suite of edge tooling available at our disposal. As with most new IoT Greengrass feature, it can be a bit bumped to get setup with. I would know, I fought through the setup process on the day of release and ran into a couple quirks that I figure I'll share with the world in the form of an unofficial guide.
 
@@ -13,7 +13,7 @@ What you will learn if you read this guide:
 
 This post is part of a larger series where we delve into some of the more advanced features of AWS IoT Greengrass. The code in the [t04glovern/aws-greener-grass](https://github.com/t04glovern/aws-greener-grass) will help bootstrap all the resources you will need to run this portion of the tutorials. If you would like the most seamless learning experience, ensure you have completed the following posts
 
-* [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
+* [Greengrass - Greengrass Device Setup](../device-setup/README.md)
 
 The information below doesn't contain anything super specific to our environment. Once you have a basic device setup and connected to Greengrass, you'll be able to continue with this guide.
 

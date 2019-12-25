@@ -1,4 +1,4 @@
-# Greener Grass - Device Setup - Raspberry Pi
+# Greengrass - Device Setup - Raspberry Pi
 
 For this deployment we'll be describing how to setup Greengrass Core on a Raspberry Pi. This post is an extension of a larger series called Greener Grass, and once these steps have been completed please refer back to that guide to continue your learning.
 
@@ -176,4 +176,4 @@ ls -al /greengrass
 
 The Raspberry Pi is now setup and configured with Greengrass and ready for certificates to authenticate it with AWS IoT. For information on how to do this, please return to the previous post:
 
-* [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
+* [Greengrass - Greengrass Device Setup](../device-setup/README.md)

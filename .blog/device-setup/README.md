@@ -1,4 +1,4 @@
-# Greener Grass - Device Setup
+# Greengrass - Device Setup
 
 AWS IoT Greengrass is a managed service that allows you to easily manage and communicate with edge devices. It sells itself as a central way to deploy to huge fleets of devices in a repeatable way.
 
@@ -21,7 +21,7 @@ Although this guide follows the setup of the Raspberry Pi, It is worth noting th
 
 To setup the device you are using with Greengrass, refer to one of the following guides before moving forward:
 
-* [Greener Grass - Device Setup - Raspberry Pi](../device-setup-raspberry-pi/README.md)
+* [Greengrass - Device Setup - Raspberry Pi](../device-setup-raspberry-pi/README.md)
 
 ## Deploying Greener Grass
 

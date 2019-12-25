@@ -31,7 +31,7 @@ It would help tremendously if you have either setup or done the following:
 
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) installed and setup
 * Briefly skimmed the [AWS IoT Secure Tunneling documentation](https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html)
-* Have completed the device setup post: [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
+* Have completed the device setup post: [Greengrass - Greengrass Device Setup](../device-setup/README.md)
   * If not this, then atleast know how to create AWS IoT certificates with a policy `iot*`
 
 ## Build localproxy
