@@ -1,8 +1,8 @@
-# Greengrass - Secure Tunnel
+# Greengrass - Secure Tunneling
 
 ## Introduction
 
-AWS IoT Secure Tunnel is a managed proxy meant for devices positioned behind secure firewalls on remote sites. A secure tunnel can be created using temporary credentials allowing access to the device on configurable ports. The secure tunneling process requies a bidirectional link to be estabilished before communication can proceed.
+AWS IoT Secure Tunneling is a managed proxy meant for devices positioned behind secure firewalls on remote sites. A secure tunnel can be created using temporary credentials allowing access to the device on configurable ports. The secure tunneling process requies a bidirectional link to be estabilished before communication can proceed.
 
 This post aims to demisify the setup and management process of AWS IoT Secure Tunneling by demonstrating an end to end example.
 
@@ -10,7 +10,7 @@ This post aims to demisify the setup and management process of AWS IoT Secure Tu
 
 I found that [the documentation on this topic](https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html) was a little lacking so I created the following diagram with annotations
 
-![AWS IoT Secure Tunnel Architecture](img/aws-secure-tunnel-architecture.png)
+![AWS IoT Secure Tunneling Architecture](img/aws-secure-tunnel-architecture.png)
 
 1. Device uses pre-allocated x509 certificates with specific permissions to subscribe to the amazon managed `tunnels/notify` topic.
 2. Tunnel is opened either using the GUI or CLI. device name defined to target specific device.
@@ -24,6 +24,15 @@ I found that [the documentation on this topic](https://docs.aws.amazon.com/iot/l
 6. Client can now open a connection on the defined port (in this example we used port 5555) and it will be tunnelled through to the IoT device.
 
 Now that you have an idea how this process works, let's go through and implement a simple SSH tunnel to a Raspberry Pi.
+
+## Prerequisites
+
+It would help tremendously if you have either setup or done the following:
+
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) installed and setup
+* Briefly skimmed the [AWS IoT Secure Tunneling documentation](https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html)
+* Have completed the device setup post: [Greener Grass - Greengrass Device Setup](../device-setup/README.md)
+  * If not this, then atleast know how to create AWS IoT certificates with a policy `iot*`
 
 ## Build localproxy
 

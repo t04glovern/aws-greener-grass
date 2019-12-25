@@ -21,6 +21,6 @@ We will be covering all existing and future features of Greengrass with a strong
   * Logging [Incomplete]
   * OTA Update [Incomplete]
   * [Docker](.blog/greengrass-docker/README.md)
-  * [Secure Tunnel](.blog/greengrass-secure-tunnel/README.md)
+  * [Secure Tunneling](.blog/greengrass-secure-tunnel/README.md)
 * Device Defender
   * [Detect](.blog/device-defender-detect/README.md)
