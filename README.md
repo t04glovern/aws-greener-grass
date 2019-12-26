@@ -20,7 +20,7 @@ We will be covering all existing and future features of Greengrass with a strong
   * Machine Learning [Incomplete]
   * Secret Manager [Incomplete]
   * Logging [Incomplete]
-  * OTA Update [Incomplete]
+  * [Over The Air (OTA) Updates](.blog/greengrass-ota-update/README.md)
   * [Docker](.blog/greengrass-docker/README.md)
   * [Secure Tunneling](.blog/greengrass-secure-tunnel/README.md)
 * Device Defender

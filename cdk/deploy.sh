@@ -50,7 +50,7 @@ cat <<EOT > config/config.json
     },
     "runtime" : {
         "cgroup" : {
-        "useSystemd" : "yes"
+            "useSystemd" : "yes"
         }
     },
     "managedRespawn" : false,
